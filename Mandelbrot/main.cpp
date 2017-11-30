@@ -2,11 +2,10 @@
 #include "ComplexNumber.h"
 #include "MandelbrotSet.h"
 #include <iostream>
+#include <thread>
 
-unsigned int WIDTH = 1000, HEIGHT = 800;
+unsigned int WIDTH = 1200, HEIGHT = 900;
 sf::Vector2<double> RANGE{ 4,4 };
-sf::Image img;
-sf::Texture txt;
 sf::Sprite sprite;
 
 double DELTA_XY = 0.1;
@@ -14,38 +13,34 @@ double DELTA_XY = 0.1;
 const std::vector<sf::Vector2<double>> interestingLocations{
 	{ -0.7463 , 0.1102 },
 	{ -0.7453 , 0.1127 },
-	{ -0.925 , 0.266 }
+	{ -0.925 , 0.266 },
+	{ -0.235125 , 0.827215 },
+	{ 0.2549870375144766 , -0.0005679790528465 },
+	{ -0.840719 , 0.22442 },
+	{ -0.0452407411 , 0.9868162204352258 },
+	{ -0.8115312340458353 ,  0.2014296112433656 },
+	{ 0.432539867562512 ,  0.226118675951818 }
 };
 
 void zoom(MandelbrotSet& m, double deltaXY);
 void zoom2(MandelbrotSet& m);
+void zoom3(MandelbrotSet& m);
 
 
-void updateMandelbrot(MandelbrotSet& m)
-{
-	auto v = m.createSet();
-	for (size_t y = 0; y < HEIGHT; y++)
-	{
-		for (size_t x = 0; x < WIDTH; x++)
-			img.setPixel(x, y, v[y*WIDTH + x].first ? sf::Color::Blue : sf::Color::Black);
-	}
-	txt.create(WIDTH, HEIGHT);
-	txt.update(img);
-	sprite.setTexture(txt);
-}
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!");
-	img.create(WIDTH, HEIGHT);
+	std::cout << "\nThis machine supports " << std::thread::hardware_concurrency() << " threads\n\n";
 
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!");
 	MandelbrotSet m;
-	m.setSize({WIDTH,HEIGHT });
+	m.setSize({WIDTH,HEIGHT});
 	m.setRange(RANGE);
-	m.setCenter(interestingLocations[2]);
-	updateMandelbrot(m);
-	
-	
+	std::cout << "Choose one of " << interestingLocations.size() << " locations: ";
+	int l;
+	std::cin >> l;
+	m.setCenter(interestingLocations[l-1]);
+
 
 	while (window.isOpen())
 	{
@@ -56,7 +51,7 @@ int main()
 				window.close();
 		}
 
-		zoom2(m);
+		zoom3(m);
 		window.clear();
 		window.draw(sprite);
 		window.display();
@@ -68,7 +63,7 @@ int main()
 void zoom(MandelbrotSet& m, double deltaXY)
 {
 	RANGE -= {deltaXY, deltaXY};
-	updateMandelbrot(m);
+	m.createSet();
 }
 
 void zoom2(MandelbrotSet & m)
@@ -76,5 +71,13 @@ void zoom2(MandelbrotSet & m)
 	auto r = m.getRange();
 	r *= 0.9;
 	m.setRange(r);
-	updateMandelbrot(m);
+	sprite = m.createSetAndColor();
+}
+
+void zoom3(MandelbrotSet & m)
+{
+	auto r = m.getRange();
+	r *= 0.9;
+	m.setRange(r);
+	sprite = m.createSetParallel();
 }

@@ -1,5 +1,5 @@
 #include "ComplexNumber.h"
-
+#include <cmath>
 
 ComplexNumber::ComplexNumber()
 {
@@ -38,4 +38,9 @@ ComplexNumber ComplexNumber::squared()
 float ComplexNumber::squaredAbs()
 {
 	return this->a * this->a + this->b * this->b;
+}
+
+float ComplexNumber::abs()
+{
+	return std::sqrt(squaredAbs());
 }

@@ -2,6 +2,7 @@
 #include "ComplexNumber.h"
 #include <vector>
 #include "SFML\System\Vector2.hpp"
+#include "SFML\Graphics.hpp"
 
 class MandelbrotSet
 {
@@ -11,7 +12,9 @@ public:
 
 	std::vector<std::pair<bool, int>> points;
 
-	std::vector<std::pair<bool, int>>& createSet();
+	const sf::Sprite& createSet();
+	const sf::Sprite& createSetAndColor();
+	const sf::Sprite& createSetParallel();
 
 	void setRange(sf::Vector2<double> range);
 	void setSize(sf::Vector2u size);
@@ -19,11 +22,24 @@ public:
 	sf::Vector2<double> getRange();
 
 private:
+
+	sf::Color 
+		start{ sf::Color(0,0,100)}, 
+		end{ sf::Color::Yellow };
+	
+	sf::Image img;
+	sf::Texture txt;
+	sf::Sprite sprite;
+
 	sf::Vector2<double>
 		range{4,4},
 		center{ 0,0 };
 	sf::Vector2u size{ 400,400 };
+	
 	int maxIterations{ 100 };
-	std::pair<bool,int> isInMandelbrot(ComplexNumber complex) const;
+	
+	std::pair<std::pair<bool, int>, ComplexNumber> isInMandelbrot(ComplexNumber complex) const;
+	void colorImage();
+	void createAndColorPart(std::pair<int, int> indexes, sf::Vector2<double> step);
 };
 

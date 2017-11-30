@@ -14,5 +14,6 @@ public:
 	void square();
 	ComplexNumber squared();
 	float squaredAbs();
+	float abs();
 };
 
