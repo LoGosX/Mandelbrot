@@ -20,7 +20,7 @@ public:
 	void setSize(sf::Vector2u size);
 	void setCenter(sf::Vector2<double> center);
 	sf::Vector2<double> getRange();
-
+	void setMaxIterations(int value);
 private:
 
 	sf::Color 

@@ -38,6 +38,11 @@ sf::Vector2<double> MandelbrotSet::getRange()
 	return range;
 }
 
+void MandelbrotSet::setMaxIterations(int value)
+{
+	maxIterations = value;
+}
+
 std::pair<std::pair<bool, int>,ComplexNumber> MandelbrotSet::isInMandelbrot(ComplexNumber complex) const
 {
 	ComplexNumber c(0,0);

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 
-unsigned int WIDTH = 1200, HEIGHT = 900;
+unsigned int WIDTH = 1920, HEIGHT = 1200;
 sf::Vector2<double> RANGE{ 4,4 };
 sf::Sprite sprite;
 
@@ -40,7 +40,10 @@ int main()
 	int l;
 	std::cin >> l;
 	m.setCenter(interestingLocations[l-1]);
-
+	std::cout << "Chose max iterations: ";
+	int maxIter;
+	std::cin >> maxIter;
+	m.setMaxIterations(maxIter);
 
 	while (window.isOpen())
 	{
