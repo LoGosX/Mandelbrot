@@ -1,15 +1,13 @@
 #include "ComplexNumber.h"
 
 
-
 ComplexNumber::ComplexNumber()
 {
 }
 
-ComplexNumber::ComplexNumber(float a, float b) : a(a), b(b)
+ComplexNumber::ComplexNumber(double a, double b) : a(a), b(b)
 {
 }
-
 
 ComplexNumber::~ComplexNumber()
 {
