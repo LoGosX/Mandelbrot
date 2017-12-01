@@ -21,11 +21,13 @@ public:
 	void setCenter(sf::Vector2<double> center);
 	sf::Vector2<double> getRange();
 	void setMaxIterations(int value);
+
+	const sf::Vector2<double> defaultRange{ 4,4 };
 private:
 
-	sf::Color 
-		start{ sf::Color(0,0,100)}, 
-		end{ sf::Color::Yellow };
+	sf::Color
+		start{ sf::Color(0,0,0) },
+		end{ sf::Color(255,120,20) };//sf::Color(51,255,51)};
 	
 	sf::Image img;
 	sf::Texture txt;
@@ -33,7 +35,7 @@ private:
 
 	sf::Vector2<double>
 		range{4,4},
-		center{ 0,0 };
+		center{ -0.7453, 0.1127 };
 	sf::Vector2u size{ 400,400 };
 	
 	int maxIterations{ 100 };

@@ -3,64 +3,89 @@
 #include "MandelbrotSet.h"
 #include <iostream>
 #include <thread>
+#include <fstream>
 
 unsigned int WIDTH = 1920, HEIGHT = 1200;
 sf::Vector2<double> RANGE{ 4,4 };
 sf::Sprite sprite;
 
-double DELTA_XY = 0.1;
+std::vector < std::pair<sf::Vector2<double>, double>> interestingLocations;
 
-const std::vector<sf::Vector2<double>> interestingLocations{
-	{ -0.7463 , 0.1102 },
-	{ -0.7453 , 0.1127 },
-	{ -0.925 , 0.266 },
-	{ -0.235125 , 0.827215 },
-	{ 0.2549870375144766 , -0.0005679790528465 },
-	{ -0.840719 , 0.22442 },
-	{ -0.0452407411 , 0.9868162204352258 },
-	{ -0.8115312340458353 ,  0.2014296112433656 },
-	{ 0.432539867562512 ,  0.226118675951818 }
-};
-
+void zoomDefault(MandelbrotSet& m);
 void zoom(MandelbrotSet& m, double deltaXY);
 void zoom2(MandelbrotSet& m);
 void zoom3(MandelbrotSet& m);
-
+bool loadLocationsFromFile(const char* filePath);
 
 
 int main()
 {
 	std::cout << "\nThis machine supports " << std::thread::hardware_concurrency() << " threads\n\n";
 
-	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Mandelbrot mANdElBroT");
 	MandelbrotSet m;
 	m.setSize({WIDTH,HEIGHT});
-	m.setRange(RANGE);
-	std::cout << "Choose one of " << interestingLocations.size() << " locations: ";
-	int l;
-	std::cin >> l;
-	m.setCenter(interestingLocations[l-1]);
-	std::cout << "Chose max iterations: ";
-	int maxIter;
-	std::cin >> maxIter;
-	m.setMaxIterations(maxIter);
+	
 
+
+	bool restart, pause = false, loadedFromFile = loadLocationsFromFile("locations.txt");
 	while (window.isOpen())
 	{
-		sf::Event event;
-		while (window.pollEvent(event))
+		restart = false;
+		m.setRange(RANGE);
+
+		if (loadedFromFile)
 		{
-			if (event.type == sf::Event::Closed)
-				window.close();
+			zoomDefault(m);
+			window.clear();
+			window.draw(sprite);
+			window.display();
+
+			std::cout << "Choose one of " << interestingLocations.size() << " locations: ";
+			int l;
+			std::cin >> l;
+			m.setCenter(interestingLocations[l - 1].first);
+			std::cout << "Chose max iterations: ";
+			int maxIter;
+			std::cin >> maxIter;
+			m.setMaxIterations(maxIter);
+			pause = false;
 		}
 
-		zoom3(m);
-		window.clear();
-		window.draw(sprite);
-		window.display();
+		while (!restart && window.isOpen())
+		{
+			sf::Event event;
+			while (window.pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					window.close();
+				if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+					restart = true;
+				if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+					pause = !pause;
+			}
+
+			if (!pause)
+			{
+				zoom3(m);
+				window.clear();
+				window.draw(sprite);
+				window.display();
+			}
+		}
 	}
 
+	
+
+	
+
 	return 0;
+}
+
+void zoomDefault(MandelbrotSet& m)
+{
+	m.setRange(m.defaultRange);
+	sprite = m.createSetAndColor();
 }
 
 void zoom(MandelbrotSet& m, double deltaXY)
@@ -83,4 +108,16 @@ void zoom3(MandelbrotSet & m)
 	r *= 0.9;
 	m.setRange(r);
 	sprite = m.createSetParallel();
+}
+
+bool loadLocationsFromFile(const char * filePath)
+{
+	std::fstream file(filePath, std::ios::in | std::ios::out);
+	if(!file.good())
+		return false;
+
+	std::pair<sf::Vector2<double>, double> d;
+	while (file >> d.first.x >> d.first.y >> d.second)
+		interestingLocations.push_back(d);
+	return true;
 }
