@@ -25,7 +25,6 @@ void MandelbrotSet::setSize(sf::Vector2u size)
 {
 	this->size = size;
 	this->img.create(size.x, size.y);
-	txt.create(size.x, size.y);
 }
 
 void MandelbrotSet::setCenter(sf::Vector2<double> center)
@@ -41,6 +40,11 @@ sf::Vector2<double> MandelbrotSet::getRange()
 void MandelbrotSet::setMaxIterations(int value)
 {
 	maxIterations = value;
+}
+
+bool MandelbrotSet::saveImageTo(const char * filename)
+{
+	return img.saveToFile(filename);
 }
 
 std::pair<std::pair<bool, int>,ComplexNumber> MandelbrotSet::isInMandelbrot(ComplexNumber complex) const
@@ -79,7 +83,7 @@ float smoothValue(int iter, int maxIter, ComplexNumber zn)
 	return (iter + 1 - std::log(std::log(zn.abs())) / std::log(2)) / maxIter;
 }
 
-const sf::Sprite& MandelbrotSet::createSet()
+const sf::Image& MandelbrotSet::createSet()
 {
 	points.resize(size.x * size.y);
 	int iterX = 0, iterY = 0;
@@ -93,12 +97,10 @@ const sf::Sprite& MandelbrotSet::createSet()
 		std::cout << static_cast<int>(std::ceil(iterY * size.x + iterX) * 100 / (size.x * size.y)) << "%\r";
 	}
 	colorImage();
-	txt.update(img);
-	sprite.setTexture(txt);
-	return this->sprite;
+	return this->img;
 }
 
-const sf::Sprite & MandelbrotSet::createSetAndColor()
+const sf::Image& MandelbrotSet::createSetAndColor()
 {
 	points.resize(size.x * size.y);
 	int iterX = 0, iterY = 0;
@@ -117,12 +119,10 @@ const sf::Sprite & MandelbrotSet::createSetAndColor()
 		std::cout << "Creating... ";
 		std::cout << static_cast<int>(std::ceil(iterY * size.x + iterX) * 100 / (size.x * size.y)) << "%\r";
 	}
-	txt.update(img);
-	sprite.setTexture(txt);
-	return this->sprite;
+	return this->img;
 }
 
-const sf::Sprite & MandelbrotSet::createSetParallel()
+const sf::Image& MandelbrotSet::createSetParallel()
 {
 	unsigned concurentThreadsSupported = std::thread::hardware_concurrency();
 	if (concurentThreadsSupported == 0)
@@ -149,9 +149,7 @@ const sf::Sprite & MandelbrotSet::createSetParallel()
 
 	for (auto& t : threads)
 		t.join();
-	txt.update(img);
-	sprite.setTexture(txt);
-	return this->sprite;
+	return this->img;
 }
 
 void MandelbrotSet::createAndColorPart(std::pair<int,int> indexes, sf::Vector2<double> step)

@@ -120,11 +120,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ComplexNumber.h" />
+    <ClInclude Include="Mandelbrot.h" />
     <ClInclude Include="MandelbrotSet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexNumber.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mandelbrot.cpp" />
     <ClCompile Include="MandelbrotSet.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
