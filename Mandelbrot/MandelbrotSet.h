@@ -18,7 +18,7 @@ public:
 	sf::Vector2<double> getRange();
 	void setMaxIterations(int value);
 	const sf::Vector2<double> defaultRange{ 4,4 };
-	bool saveImageTo(const char* path);
+	const sf::Image& getImg() const;
 private:
 
 	sf::Color

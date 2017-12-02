@@ -42,9 +42,9 @@ void MandelbrotSet::setMaxIterations(int value)
 	maxIterations = value;
 }
 
-bool MandelbrotSet::saveImageTo(const char * filename)
+const sf::Image & MandelbrotSet::getImg() const
 {
-	return img.saveToFile(filename);
+	return img;
 }
 
 std::pair<std::pair<bool, int>,ComplexNumber> MandelbrotSet::isInMandelbrot(ComplexNumber complex) const

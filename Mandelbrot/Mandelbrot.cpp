@@ -35,7 +35,7 @@ const sf::Sprite& Mandelbrot::zoom(ComplexNumber coordinate, double radius)
 
 bool Mandelbrot::saveCurrentFrame(const std::string& filepath)
 {
-	return set.saveImageTo((filepath + std::to_string(frame++) + ".jpg").c_str());
+	return set.getImg().saveToFile((filepath + std::to_string(frame++) + ".jpg").c_str());
 }
 
 bool Mandelbrot::saveToFile(bool value)
