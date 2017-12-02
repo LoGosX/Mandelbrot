@@ -29,7 +29,6 @@ private:
 	bool runningZoom{ false }, save_to_file{ false };
 	double
 		iterationConstant,
-		constIterationConstant{0},
 		zoomConstant,
 		currentRadius,
 		currentIterations{ 100 };

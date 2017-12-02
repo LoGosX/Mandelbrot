@@ -10,10 +10,6 @@ public:
 	MandelbrotSet();
 	~MandelbrotSet();
 
-	std::vector<std::pair<bool, int>> points;
-
-	const sf::Image& createSet();
-	const sf::Image& createSetAndColor();
 	const sf::Image& createSetParallel();
 
 	void setRange(sf::Vector2<double> range);
@@ -37,7 +33,6 @@ private:
 	sf::Vector2u size{ 400,400 };
 	int maxIterations{ 100 };
 	std::pair<std::pair<bool, int>, ComplexNumber> isInMandelbrot(ComplexNumber complex) const;
-	void colorImage();
 	void createAndColorPart(std::pair<int, int> indexes, sf::Vector2<double> step);
 };
 
